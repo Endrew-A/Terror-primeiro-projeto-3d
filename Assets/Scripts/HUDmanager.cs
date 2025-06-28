@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,43 +26,49 @@ public class HUDmanager : MonoBehaviour
 
     public Slider stamina_bar;
     public Image stamina_color;
-    //public CanvasGroup slidergroup;
+
+    public GameObject press_e_obj;
+
+    public Text paper_count;
+    public int papers=0;
+
+    public GameObject monster_obj;
+    GameObject player_obj;
+
+    public GameObject victory_screen;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        //slidergroup.alpha = 0f;
-        //slidergroup.gameObject.SetActive(true);
+        player_obj = GameObject.FindGameObjectWithTag("Player");
+        Papercount();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    /*public IEnumerator FadeInStamina()
+    void Papercount()
     {
-        float transition = 0;
-
-        while(transition < 1f)
-        {
-            transition += Time.deltaTime;
-            slidergroup.alpha = Mathf.Clamp01(transition / 1f);
-            yield return null;
-        }
-        
+        paper_count.text = papers.ToString() + "/5";
     }
 
-    public IEnumerator FadeOutStamina()
+    public void Addpaper()
     {
-        float transition = 0;
+        papers++;
+        Papercount();
 
-        while(transition < 1f)
+        monster_obj.SetActive(true);
+
+        if(papers == 5)
         {
-            transition += Time.deltaTime;
-            slidergroup.alpha = Mathf.Clamp01( 1 - (transition / 1f));
-            yield return null;
+            monster_obj.SetActive(false);
+            victory_screen.SetActive(true);
+            player_obj.GetComponent<CharacterController>().enabled = false;
+            Cursor.lockState = CursorLockMode.None;
         }
-    }*/
+    }
 }
