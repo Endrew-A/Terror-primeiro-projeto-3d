@@ -7,7 +7,11 @@ public class Shooting : MonoBehaviour
     public GameObject gun, gun_aimed, flashlight, shoot_effect;
     Vector3 initial_pos, aimed_pos;
     Quaternion inition_rot, aimed_rot;
+    bool is_aiming = false, is_reloading = false;
+    public Animator gun_anim;
 
+    //cooldown
+    float cooldown_time = 1.4f, cooldown = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -23,28 +27,38 @@ public class Shooting : MonoBehaviour
     {
         Aim();
         FlashOnOff();
+        Reload();
     }
 
     void Aim()
     {
         if (Input.GetMouseButton(1))
         {
-            if (gun.transform.localPosition != aimed_pos)
+            if (!is_aiming && !is_reloading)
             {
-                gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, aimed_pos, 5 * Time.deltaTime);
-                gun.transform.localRotation = Quaternion.Lerp(gun.transform.localRotation, aimed_rot, 5 * Time.deltaTime);
+                //mira
+                is_aiming = true;
+                gun_anim.SetBool("is_aiming", true);
+                //gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, aimed_pos, 5 * Time.deltaTime);
+                //gun.transform.localRotation = Quaternion.Lerp(gun.transform.localRotation, aimed_rot, 5 * Time.deltaTime);
             }
             else
             {
-                Shoot();
+                if (!is_reloading)
+                {
+                    Shoot();
+                }
             }
         }
         else
         {
-            if (gun.transform.localPosition != initial_pos)
+            if (is_aiming)
             {
-                gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, initial_pos, 5 * Time.deltaTime);
-                gun.transform.localRotation = Quaternion.Lerp(gun.transform.localRotation, inition_rot, 5 * Time.deltaTime);
+                //volta pro idle
+                is_aiming = false;
+                gun_anim.SetBool("is_aiming", false);
+                //gun.transform.localPosition = Vector3.Lerp(gun.transform.localPosition, initial_pos, 5 * Time.deltaTime);
+                //gun.transform.localRotation = Quaternion.Lerp(gun.transform.localRotation, inition_rot, 5 * Time.deltaTime);
             }
         }
     }
@@ -79,5 +93,25 @@ public class Shooting : MonoBehaviour
                 flashlight.SetActive(true);
             }
         }
+    }
+
+    void Reload()
+    {
+        if(Input.GetKeyDown(KeyCode.R) && cooldown>cooldown_time)
+        {
+            is_reloading = true;
+            gun_anim.SetBool("is_reloading", true);
+            cooldown = 0;
+        }
+        else
+        {
+            cooldown += Time.deltaTime;
+            if (cooldown > cooldown_time)
+            {
+                is_reloading = false;
+                gun_anim.SetBool("is_reloading", false);
+            }
+        }
+        
     }
 }
