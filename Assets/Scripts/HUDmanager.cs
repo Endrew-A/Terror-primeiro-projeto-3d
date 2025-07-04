@@ -37,6 +37,7 @@ public class HUDmanager : MonoBehaviour
 
     public GameObject victory_screen;
 
+    public Text Munition_count;
 
     // Start is called before the first frame update
     void Start()
@@ -70,5 +71,10 @@ public class HUDmanager : MonoBehaviour
             player_obj.GetComponent<CharacterController>().enabled = false;
             Cursor.lockState = CursorLockMode.None;
         }
+    }
+
+    public void RefreshMunition(int current, int max)
+    {
+        Munition_count.text = current.ToString() + "/" + max.ToString();
     }
 }
