@@ -5,7 +5,7 @@ using UnityEngine;
 public class Shooting : MonoBehaviour
 {
     public GameObject flashlight, shoot_effect;
-    public GameObject[] gun;
+    public GameObject[] gun, particle_pos;
     public int selected_gun;
     bool can_shoot = true, is_auto = false;
     float cooldown_shoot =0.5f, cooldown_shoot_timer = 0;
@@ -82,17 +82,35 @@ public class Shooting : MonoBehaviour
             Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out bullet_hit);
             if(bullet_hit.collider.tag == "Enemy")
             {
-                Destroy(bullet_hit.collider.gameObject); 
+                if(selected_gun == 0)
+                {
+                    bullet_hit.collider.GetComponent<Monster>().RemoveHP(20);
+                }
+                else
+                {
+                    bullet_hit.collider.GetComponent<Monster>().RemoveHP(5);
+                }
+            }
+            else if(bullet_hit.collider.tag == "EnemyHead")
+            {
+                if (selected_gun == 0)
+                {
+                    bullet_hit.collider.GetComponentInParent<Monster>().RemoveHP(50);
+                }
+                else
+                {
+                    bullet_hit.collider.GetComponentInParent<Monster>().RemoveHP(15);
+                }
             }
 
             if (selected_gun == 1)
             {
-                GameObject particle = Instantiate(shoot_effect, gun[selected_gun].transform);
+                GameObject particle = Instantiate(shoot_effect, particle_pos[selected_gun].transform);
                 Destroy(particle, 0.25f);
             }
             else
             {
-                GameObject particle = Instantiate(shoot_effect, gun[selected_gun].transform);
+                GameObject particle = Instantiate(shoot_effect, particle_pos[selected_gun].transform);
                 Destroy(particle, 0.25f);
             }
             //gun.transform.localPosition += new Vector3(Random.Range(-0.15f, 0.15f), Random.Range(-0.15f, 0.15f), 0);

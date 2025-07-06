@@ -36,7 +36,7 @@ public class HUDmanager : MonoBehaviour
     bool spawned = false;
     GameObject player_obj;
 
-    public GameObject victory_screen;
+    public GameObject victory_screen, gameover_screen, gameover_anim;
 
     public Text Munition_count;
 
@@ -65,7 +65,9 @@ public class HUDmanager : MonoBehaviour
 
         if(papers == 1 && !spawned)
         {
-            Instantiate(monster_obj, new Vector3(38.18f, 0.029f, 20f), Quaternion.identity);
+            GameObject monster_instance = Instantiate(monster_obj, new Vector3(38.18f, 0.029f, 20f), Quaternion.identity);
+            monster_instance.GetComponent<Monster>().gameover_obj = gameover_anim;
+            monster_instance.GetComponent<Monster>().gameover_ui = gameover_screen;
             spawned = true;
         }
         

@@ -9,6 +9,10 @@ public class Monster : MonoBehaviour
     GameObject player_obj;
 
     public GameObject gameover_obj, gameover_ui;
+
+    //HP
+    public int monster_hp = 50;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +35,15 @@ public class Monster : MonoBehaviour
             player_obj.GetComponent<CharacterController>().enabled = false;
             Cursor.lockState = CursorLockMode.None;
 
+            Destroy(this.gameObject);
+        }
+    }
+
+    public void RemoveHP(int hp)
+    {
+        monster_hp -= hp;
+        if (monster_hp <= 0)
+        {
             Destroy(this.gameObject);
         }
     }
