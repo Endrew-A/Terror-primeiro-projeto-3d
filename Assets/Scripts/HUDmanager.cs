@@ -33,6 +33,7 @@ public class HUDmanager : MonoBehaviour
     public int papers=0;
 
     public GameObject monster_obj;
+    bool spawned = false;
     GameObject player_obj;
 
     public GameObject victory_screen;
@@ -62,7 +63,12 @@ public class HUDmanager : MonoBehaviour
         papers++;
         Papercount();
 
-        monster_obj.SetActive(true);
+        if(papers == 1 && !spawned)
+        {
+            Instantiate(monster_obj, new Vector3(38.18f, 0.029f, 20f), Quaternion.identity);
+            spawned = true;
+        }
+        
 
         if(papers == 5)
         {
